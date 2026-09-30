@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ name }} | {{ title }}</title>
+  <meta name="description" content="{{ tagline }}">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="skip" href="#about">Skip to content</a>
+
+  <header class="nav">
+    <a class="nav-name" href="#top">{{ name }}</a>
+    <nav aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#stack">Stack</a>
+      <a href="#work">Work</a>
+      <a href="#path">Path</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <canvas id="field" aria-hidden="true"></canvas>
+      <div class="hero-copy">
+        <p class="hero-role">{{ title }}</p>
+        <h1>{{ name }}</h1>
+        <p class="hero-tag">{{ tagline }}</p>
+        <div class="hero-actions">
+          <a class="btn btn-solid" href="#work">See my work</a>
+          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="block about">
+      <h2>About</h2>
+      <div class="about-grid">
+        <div class="prose">
+          {% for p in about %}<p>{{ p }}</p>{% endfor %}
+        </div>
+        <dl class="facts">
+          {% for f in facts %}
+          <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+          {% endfor %}
+        </dl>
+      </div>
+    </section>
+
+    <section id="stack" class="block">
+      <h2>What I work with</h2>
+      <div class="stack">
+        {% for g in stack %}
+        <div class="stack-col tone-{{ g.tone }}">
+          <h3>{{ g.group }}</h3>
+          <p class="stack-note">{{ g.note }}</p>
+          <ul>
+            {% for i in g["items"] %}<li>{{ i }}</li>{% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="work" class="block">
+      <h2>Selected work</h2>
+      <div class="work">
+        {% for p in projects %}
+        <details class="project">
+          <summary>
+            <span class="project-title">{{ p.title }}</span>
+            <span class="project-summary">{{ p.summary }}</span>
+            <span class="project-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="project-body">
+            <p>{{ p.detail }}</p>
+            <ul class="tags">
+              {% for t in p.tags %}<li>{{ t }}</li>{% endfor %}
+            </ul>
+            {% if p.link %}<a class="text-link" href="{{ p.link }}" target="_blank" rel="noopener">View project</a>{% endif %}
+          </div>
+        </details>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="path" class="block">
+      <h2>Path so far</h2>
+      <ol class="path">
+        {% for s in path %}
+        <li>
+          <span class="path-period">{{ s.period }}</span>
+          <div>
+            <h3>{{ s.role }}</h3>
+            <p class="path-place">{{ s.place }}</p>
+            <p>{{ s.text }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section id="contact" class="block contact">
+      <h2>Say hello</h2>
+      <div class="contact-grid">
+        <div class="prose">
+          <p>Have a cloud platform to build or an AI idea to test? Send a note and I will reply.</p>
+          <p><a class="text-link" href="mailto:{{ email }}">{{ email }}</a></p>
+          <ul class="social">
+            {% for l in links %}<li><a class="text-link" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a></li>{% endfor %}
+          </ul>
+        </div>
+        <form id="contact-form" novalidate>
+          <label>Name<input name="name" type="text" autocomplete="name" required></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required></label>
+          <label>Message<textarea name="message" rows="5" maxlength="2000" required></textarea></label>
+          <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn-solid" type="submit">Send message</button>
+          <p id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>{{ name }}, {{ title }}</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
